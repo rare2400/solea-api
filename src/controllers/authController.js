@@ -121,7 +121,7 @@ export async function getAllUsers(request, reply) {
 export async function updateUser(request, reply) {
     try {
         const { db, ObjectId } = request.server.mongo
-        const { id } = request.user.userId
+        const { id } = request.params
         const updates = request.body
 
         // Hide password field if it's not being updated
