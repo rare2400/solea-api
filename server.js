@@ -7,6 +7,9 @@ import jwt from '@fastify/jwt'
 import auth from '@fastify/auth'
 import mongoDb from './src/plugins/mongodb.js'
 
+// import routes
+import authRoutes from './src/routes/authRoutes.js'
+
 // Load environment variables from .env file
 dotenv.config()
 
@@ -30,20 +33,19 @@ fastify.decorate("verifyJWT", async (request, reply) => {
     try {
         await request.jwtVerify()
     } catch (error) {
-        reply.code(401).send({ error: "Unauthorized" })
+        return reply.code(401).send({ error: "Unauthorized" })
     }
 })
 
 // Verify admin role
 fastify.decorate("verifyAdmin", async (request, reply) => {
-    try {
-        if (request.user.role !== 'admin') {
-            return reply.code(403).send({ error: "Forbidden: Admins only" })
-        }
-    } catch (error) {
-        reply.code(401).send({ error: "Unauthorized" })
+    if (!request.user || request.user.role !== 'admin') {
+        return reply.code(403).send({ error: "Forbidden: Admins only" })
     }
 })
+
+// Routes
+await fastify.register(authRoutes)
 
 
 // Start the server with error handling
