@@ -9,6 +9,7 @@ import mongoDb from './src/plugins/mongodb.js'
 
 // import routes
 import authRoutes from './src/routes/authRoutes.js'
+import productRoutes from './src/routes/productRoutes.js'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -39,14 +40,14 @@ fastify.decorate("verifyJWT", async (request, reply) => {
 
 // Verify admin role
 fastify.decorate("verifyAdmin", async (request, reply) => {
-    if (!request.user || request.user.role !== 'admin') {
+    if (!request.user || request.user.role !== "admin") {
         return reply.code(403).send({ error: "Forbidden: Admins only" })
     }
 })
 
 // Routes
-await fastify.register(authRoutes)
-
+await fastify.register(authRoutes, { prefix: "/auth" })
+await fastify.register(productRoutes, { prefix: "/products" })
 
 // Start the server with error handling
 const start = async () => {
