@@ -5,7 +5,7 @@ export const userSchema = {
     properties: {
         firstname: { type: "string", minLength: 1, maxLength: 30 },
         lastname: { type: "string", minLength: 1, maxLength: 30 },
-        email: { type: "string", format: "email" },
+        email: { type: "string" },
         password: { type: "string", minLength: 6 },
         role: { type: "string", enum: ["admin", "staff"] }
     }
@@ -16,7 +16,7 @@ export const loginSchema = {
     type: "object",
     required: ["email", "password"],
     properties: {
-        email: { type: "string", format: "email" },
+        email: { type: "string" },
         password: { type: "string", minLength: 6 }
     }
 }
@@ -28,6 +28,6 @@ export const updateUserSchema = {
     properties: {
         firstname: { type: "string", minLength: 1, maxLength: 30 },
         lastname: { type: "string", minLength: 1, maxLength: 30 },
-        email: { type: "string", format: "email" }
+        email: { type: "string" }
     }
 }
