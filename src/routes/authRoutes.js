@@ -10,13 +10,13 @@ export default async function authRoutes(fastify) {
         ], {
             relation: "and"
         }),
-        schema: userSchema,
+        schema: { body: userSchema },
         handler: authController.registerUser
     })
 
     // User login route with validation
     fastify.post("/login", {
-        schema: loginSchema,
+        schema: { body: loginSchema },
         handler: authController.loginUser
     })
 
@@ -40,7 +40,7 @@ export default async function authRoutes(fastify) {
     // PUT update user profile
     fastify.put("/users/:id", {
         preHandler: fastify.auth([fastify.verifyJWT]),
-        schema: updateUserSchema,
+        schema: { body: updateUserSchema },
         handler: authController.updateUser
     })
 
