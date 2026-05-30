@@ -19,7 +19,9 @@ const fastify = Fastify({ logger: true })
 
 // Plugins
 await fastify.register(cors, {
-    origin: "*" // Allow all origins (adjust as needed for production)
+    origin: "*", // Allow all origins for now
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
+    allowHeaders: ["Content-Type", "Authorization"]
 })
 
 await fastify.register(jwt, {
