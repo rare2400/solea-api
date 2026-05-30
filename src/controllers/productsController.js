@@ -47,13 +47,20 @@ export async function getCategories(request, reply) {
 export async function addProduct(request, reply) {
     try {
         const products = getCollection(request, "products")
-        const { name, description, price, image_url, stock, category } = request.body
+        const { name, description, price, shelf, sku, stock, category } = request.body
+
+        // Check if SKU already exists
+        const existingProduct = await products.findOne({ sku })
+        if (existingProduct) {
+            return badRequest(reply, "SKU already exists")
+        }
 
         const result = await products.insertOne({
             name,
             description,
             price,
-            image_url,
+            shelf,
+            sku,
             stock,
             category,
             created_at: new Date()
@@ -115,7 +122,7 @@ export async function updateStock(request, reply) {
         const { stock } = request.body
 
         const product = await products.findOne({ _id })
-        if (!product) return notFound(reply, message)
+        if (!product) return notFound(reply, "product not found")
 
         const newStock = product.stock + stock
         if (newStock < 0) return badRequest(reply, "Stock cannot be negative")
